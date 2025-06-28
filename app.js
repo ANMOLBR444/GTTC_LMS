@@ -87,18 +87,33 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
+app.get('/register', (req, res) => {
+    res.render('register');
+});
+
+app.post('/register', catchAsync(async (req, res) => {
+    const { username, email, password, role } = req.body;
+    const user = new User({ username, email, role });
+    const registeredUser = await User.register(user, password);
+    req.login(registeredUser, (err) => {
+        if (err) return next(err);
+        req.flash('success', 'Welcome to the LMS!');
+        res.redirect('/');
+    });
+}));
 
 
+app.get('/login', (req, res) => {
+    res.render('login');
+});
 
-
-
-
-
-
-
-
-
-
+app.post('/login', passport.authenticate('local', {
+    failureRedirect: '/login',
+    failureFlash: true
+}), (req, res) => {
+    req.flash('success', 'Welcome back!');
+    res.redirect('/');
+});
 
 
 
