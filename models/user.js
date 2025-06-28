@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Class = require('./class');
 const passportlocalmongoose = require('passport-local-mongoose');
 const Schema = mongoose.Schema;
 
@@ -16,7 +17,8 @@ const UserSchema= new Schema({
     type: String,
     enum: ['admin', 'faculty', 'student'],
     required: true
-  }
+  },
+  classes: [{ type: Schema.Types.ObjectId, ref: 'Class' }]
 });
 
 UserSchema.plugin(passportlocalmongoose);
